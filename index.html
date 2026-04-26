@@ -1059,7 +1059,47 @@ function toast(msg,type='ok'){
  t.className='show '+(type==='err'?'err':'');
  clearTimeout(t._t);t._t=setTimeout(()=>t.className='',3200);
 }
+function checkLogin() {
+    const user = prompt("Acceso Teide IV - Usuario:");
+    const pass = prompt("Contraseña:");
 
+    if (user === "admin" && pass === "teide2026") {
+        sessionStorage.setItem("rol", "admin");
+        alert("Modo Administrador: Permisos totales.");
+    } else if (user === "profe" && pass === "teide2026") {
+        sessionStorage.setItem("rol", "profe");
+        alert("Modo Profesor: Solo consulta.");
+        aplicarPermisos();
+    } else {
+        alert("Credenciales incorrectas.");
+        window.location.reload();
+    }
+}
+
+function aplicarPermisos() {
+    const rol = sessionStorage.getItem("rol");
+    if (rol === "profe") {
+        // Ocultar botones de añadir (los que tienen clase btn-primary o similar)
+        // y botones de borrar dentro de las tablas
+        const botones = document.querySelectorAll('button.btn-primary, .action-btns button:last-child');
+        botones.forEach(b => b.style.display = 'none');
+        
+        // Ocultar el botón flotante de añadir (+)
+        const fab = document.querySelector('.fab');
+        if(fab) fab.style.display = 'none';
+    }
+}
+
+// Ejecutar al cargar
+window.addEventListener('load', () => {
+    checkLogin();
+    // Re-aplicar permisos cada vez que se renderice la tabla
+    const originalRender = renderAll;
+    renderAll = function() {
+        originalRender();
+        aplicarPermisos();
+    };
+});
 
 </script>
 </body>
