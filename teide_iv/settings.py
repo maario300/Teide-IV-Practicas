@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware', # <--- AÑADE ESTA LÍNEA
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -120,3 +121,6 @@ STATIC_URL = 'static/'
 # Configuración de Login/Logout
 LOGIN_URL = '/login/'  # La URL donde está tu formulario
 LOGIN_REDIRECT_URL = '/' # A dónde ir tras un login exitoso (opcional si usas tus redirects manuales)
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
